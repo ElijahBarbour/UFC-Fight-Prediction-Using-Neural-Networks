@@ -1,5 +1,5 @@
 
-# UFC Fight Prediciton Using Machine Learning
+# UFC Fight Prediciton Using Neural Networks
 
 This project constructs a Multi-Layer Neural Network Model in order to predict the winners of UFC Fights. 
 
