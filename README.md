@@ -30,7 +30,7 @@ Keith Galli [Introduction to Neural Networks in Python (what you need to know) |
 ## ⚙️ Setup
 - Install :-
 ```bash
-  pip install ipykernel pandas tensorflow sklearn matplotlib seaborn
+  pip install ipykernel pandas tensorflow sklearn matplotlib seaborn pickle-mixin
 ```
 
 ## Deployment
