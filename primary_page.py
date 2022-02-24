@@ -3,6 +3,8 @@ import pickle
 import numpy as np
 from PIL import Image
 import os
+from tensorflow import keras
+#model = keras.models.load_model('path/to/location')
 
 
 def load_data_1():
@@ -11,7 +13,7 @@ def load_data_1():
     return data_1
 
 def load_data_NN():
-    with open('saved_steps_NN.pkl', 'rb') as file_2:
+    with open('.\saved_steps_NN.pkl', 'rb') as file_2:
         data_NN = pickle.load(file_2)
     return data_NN
 
@@ -36,12 +38,15 @@ def prediction_function(X, bImage, rImage, Blue_Fighter, Red_Fighter):
         st.write("""### {}""".format(Red_Fighter))
         st.write("""#### Prediction Probability {} wins: {:.2f}%""".format(Red_Fighter, proba))
                 
-UFC_fighter_photo_loc = os.getcwd()+"/UFC_Fighters_Photos/UFCFightersPhotos"
+UFC_fighter_photo_loc = '../../Binary_Classification_UFC_Dataset/UFC_Fighters_Photos/UFCFightersPhotos'#os.getcwd()+"/UFC_Fighters_Photos/UFCFightersPhotos"
+UFC_NN_model_loc = os.getcwd()+'//UFC_NN_model'
+
+model_nn = keras.models.load_model(UFC_NN_model_loc)
 
 image = Image
 
 data_1 = load_data_1()
-#data_NN = load_data_NN()
+data_NN = load_data_NN()
 weight_classes = data_1["weight_classes"]
 fighter_classes = data_1["fighter_classes"]
 fighter_list = data_1["fighter_list"]
