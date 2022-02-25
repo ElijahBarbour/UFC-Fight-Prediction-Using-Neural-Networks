@@ -26,6 +26,7 @@ def prediction_function(X, bImage, rImage, Blue_Fighter, Red_Fighter):
 #Machine Learning Model to predict
 #I used Middleweight Garreth Mclellan vs Vik Grujic
 
+
     st.title("")
     st.title("")
     if Winner[0] >= 0:
