@@ -6,6 +6,7 @@ import os
 from tensorflow import keras
 
 
+
 def load_data_1():
     with open('saved_steps.pkl', 'rb') as file:
         data_1 = pickle.load(file)
@@ -16,7 +17,7 @@ def load_data_2():
         data_2 = pickle.load(file)
     return data_2
 
-def prediction_function(X, bImage, rImage, Blue_Fighter, Red_Fighter):
+def prediction_function(X, Blue_Fighter, Red_Fighter):
     Winner = model_nn.predict_on_batch(X)
     #print(Winner)
     #proba = model_nn.predict_proba(X)
@@ -26,23 +27,20 @@ def prediction_function(X, bImage, rImage, Blue_Fighter, Red_Fighter):
 #Machine Learning Model to predict
 #I used Middleweight Garreth Mclellan vs Vik Grujic
 
-
     st.title("")
     st.title("")
     if Winner[0] >= 0:
         st.write("""## Winner:""")
-        st.image(bImage)
-        st.title("")
+        
         st.write("""### {}""".format(Blue_Fighter))
         #st.write("""#### Prediction Probability {} wins: {:.2f}%""".format(Blue_Fighter, proba))
     else:
         st.write("""## Winner:""")
-        st.image(rImage)
-        st.title("")
+        
         st.write("""### {}""".format(Red_Fighter))
         #st.write("""#### Prediction Probability {} wins: {:.2f}%""".format(Red_Fighter, proba))
                 
-UFC_fighter_photo_loc = '../../Binary_Classification_UFC_Dataset/UFC_Fighters_Photos/UFCFightersPhotos'#os.getcwd()+"/UFC_Fighters_Photos/UFCFightersPhotos"
+UFC_fighter_photo_loc = 'https://github.com/ElijahBarbour/UFC-Fight-Prediction-Using-Machine-Learning/tree/master/UFC_Fighters_Photos/UFCFightersPhotos'#os.getcwd()+"/UFC_Fighters_Photos/UFCFightersPhotos"
 
 image = Image
 
@@ -64,6 +62,7 @@ def show_page():
     training_m_acc = training_model_acc * 100
     test_m_acc = test_model_acc * 100
     st.title("UFC Fight Prediciton Using Neural Networks")
+    st.write(""" After training and testing multiple Sequential models (shown in the .ipynb)\nThis model is a 3-Layered Neural Network w/ ReLU activation Functions for non-output layers and Sigmoid for Output Layer.\nThis model uses SGD for optimizer and Mean Absolute Error for Loss function. """)
     #st.write(os.getcwd())
     st.write("""#### Training Model Accuracy: {:.2f}%""".format(training_m_acc))
     st.write("""#### Test Model Accuracy: {:.2f}%""".format(test_m_acc))
@@ -82,35 +81,11 @@ def show_page():
     col1, col2, col3 = st.columns(3)
     with col1:
         Red_Fighter = st.selectbox(label = "Select Red Fighter", options = fighters_)
-        rFighter = Red_Fighter.replace(" ", "-")
-        rFighter_loc = UFC_fighter_photo_loc+'/'+rFighter+".jpg"
-        #st.write(rFighter_loc)
-        try: rImage = Image.open(rFighter_loc)
-        except:
-            if(weight_class == 'womens_strawweight' or weight_class == 'womens_flyweight' or weight_class == 'womens_bantamweight' or weight_class == 'womens_featherweight'):
-                rFighter_loc = UFC_fighter_photo_loc+'/'+"Default-G.jpg"
-                rImage = Image.open(rFighter_loc)
-            else:
-                rFighter_loc = UFC_fighter_photo_loc+'/'+"Default-B.jpg"
-                rImage = Image.open(rFighter_loc)
-
-        st.image(rImage)
+        
 
     with col3:
         Blue_Fighter = st.selectbox(label = "Select Blue Fighter", options = fighters_)
-        bFighter = Blue_Fighter.replace(" ", "-")
-        bFighter_loc = UFC_fighter_photo_loc+'/'+bFighter+".jpg"
-        try:
-            bImage = Image.open(bFighter_loc)
-        except:
-            if(weight_class == 'womens_strawweight' or weight_class == 'womens_flyweight' or weight_class == 'womens_bantamweight' or weight_class == 'womens_featherweight'):
-                bFighter_loc = UFC_fighter_photo_loc+'/'+"Default-G.jpg"
-                bImage = Image.open(bFighter_loc)
-            else:
-                bFighter_loc = UFC_fighter_photo_loc+'/'+"Default-B.jpg"
-                bImage = Image.open(bFighter_loc)
-
-        st.image(bImage)
+        
 
     with col2:
         st.title("")
@@ -153,7 +128,7 @@ def show_page():
                 X = np.array([[age_diff, win_streak_diff, avg_TD_landed_diff]])
 
                 try:
-                    prediction_function(X, bImage, rImage, Blue_Fighter, Red_Fighter)
+                    prediction_function(X, Blue_Fighter, Red_Fighter)
                 except:
                     st.write("""## I am sorry!""")
                     st.write("""### We have encountered an error when processing these fighters.""")
