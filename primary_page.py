@@ -4,61 +4,68 @@ import numpy as np
 from PIL import Image
 import os
 from tensorflow import keras
-#model = keras.models.load_model('path/to/location')
 
 
 def load_data_1():
-    with open('saved_steps.pkl', 'rb') as file_1:
-        data_1 = pickle.load(file_1)
+    with open('saved_steps.pkl', 'rb') as file:
+        data_1 = pickle.load(file)
     return data_1
 
-def load_data_NN():
-    with open('.\saved_steps_NN.pkl', 'rb') as file_2:
-        data_NN = pickle.load(file_2)
-    return data_NN
-
+def load_data_2():
+    with open('saved_steps_NN.pkl', 'rb') as file:
+        data_2 = pickle.load(file)
+    return data_2
 
 def prediction_function(X, bImage, rImage, Blue_Fighter, Red_Fighter):
-    Winner = model.predict(X)
-    proba = model.predict_proba(X)
-    if proba[0][0] > proba[0][1]: proba = proba[0][0]*100
-    else: proba = proba[0][1]*100
+    Winner = model_nn.predict_on_batch(X)
+    #print(Winner)
+    #proba = model_nn.predict_proba(X)
+    #if proba[0][0] > proba[0][1]: proba = proba[0][0]*100
+    #else: proba = proba[0][1]*100
+#Howd i get the >=0? because i cross referenced the output of the original 
+#Machine Learning Model to predict
+#I used Middleweight Garreth Mclellan vs Vik Grujic
+
     st.title("")
     st.title("")
-    if Winner[0] == 0:
+    if Winner[0] >= 0:
         st.write("""## Winner:""")
         st.image(bImage)
         st.title("")
         st.write("""### {}""".format(Blue_Fighter))
-        st.write("""#### Prediction Probability {} wins: {:.2f}%""".format(Blue_Fighter, proba))
+        #st.write("""#### Prediction Probability {} wins: {:.2f}%""".format(Blue_Fighter, proba))
     else:
         st.write("""## Winner:""")
         st.image(rImage)
         st.title("")
         st.write("""### {}""".format(Red_Fighter))
-        st.write("""#### Prediction Probability {} wins: {:.2f}%""".format(Red_Fighter, proba))
+        #st.write("""#### Prediction Probability {} wins: {:.2f}%""".format(Red_Fighter, proba))
                 
 UFC_fighter_photo_loc = '../../Binary_Classification_UFC_Dataset/UFC_Fighters_Photos/UFCFightersPhotos'#os.getcwd()+"/UFC_Fighters_Photos/UFCFightersPhotos"
-UFC_NN_model_loc = os.getcwd()+'//UFC_NN_model'
-
-model_nn = keras.models.load_model(UFC_NN_model_loc)
 
 image = Image
 
 data_1 = load_data_1()
-data_NN = load_data_NN()
+data_2 = load_data_2()
+
+UFC_NN_model_loc = os.getcwd()+'//UFC_NN_model'
+model_nn = keras.models.load_model(UFC_NN_model_loc)
+
 weight_classes = data_1["weight_classes"]
 fighter_classes = data_1["fighter_classes"]
 fighter_list = data_1["fighter_list"]
 fighter_stats = data_1["fighter_stats"]
-model = data_1["model"]
-model_acc = data_1["model_acc"]
+
+training_model_acc = data_2["training_model_acc"]
+test_model_acc = data_2["test_model_acc"]
 
 def show_page():
-    m_acc = model_acc * 100
-    st.title("UFC Fight Prediciton Using Machine Learning")
+    training_m_acc = training_model_acc * 100
+    test_m_acc = test_model_acc * 100
+    st.title("UFC Fight Prediciton Using Neural Networks")
     #st.write(os.getcwd())
-    st.write("""#### Model Accuracy: {:.2f}%""".format(m_acc))
+    st.write("""#### Training Model Accuracy: {:.2f}%""".format(training_m_acc))
+    st.write("""#### Test Model Accuracy: {:.2f}%""".format(test_m_acc))
     st.title("")
     st.write("""### Choose Your Weight Class""")
     st.write("##")
@@ -130,15 +137,19 @@ def show_page():
                 r_index = fighter_stats.index[fighter_stats['Name'] == Red_Fighter]
                 r_index = r_index[0]
 
+#Why Blue fighter - Red Fighter? The dataset says that every metric measured in there is BF - RF
+
                 win_streak_diff = fighter_stats['current_win_streak'][b_index] - fighter_stats['current_win_streak'][r_index]
-                loss_diff = fighter_stats['losses'][b_index] - fighter_stats['losses'][r_index]
-                round_count_diff = fighter_stats['total_rounds_fought'][b_index] - fighter_stats['total_rounds_fought'][r_index]
-                reach_diff = fighter_stats['Reach_cms'][b_index] - fighter_stats['Reach_cms'][r_index]
+                #loss_diff = fighter_stats['losses'][b_index] - fighter_stats['losses'][r_index]
+                #round_count_diff = fighter_stats['total_rounds_fought'][b_index] - fighter_stats['total_rounds_fought'][r_index]
+                #reach_diff = fighter_stats['Reach_cms'][b_index] - fighter_stats['Reach_cms'][r_index]
                 age_diff = fighter_stats['age'][b_index] - fighter_stats['age'][r_index]
                 avg_TD_landed_diff = fighter_stats['avg_TD_landed'][b_index] - fighter_stats['avg_TD_landed'][r_index]
-                sig_str_diff = fighter_stats['sig_strikes_landed'][b_index] - fighter_stats['sig_strikes_landed'][r_index]
+                #sig_str_diff = fighter_stats['sig_strikes_landed'][b_index] - fighter_stats['sig_strikes_landed'][r_index]
 
-                X = np.array([[win_streak_diff, loss_diff, round_count_diff, reach_diff, age_diff, avg_TD_landed_diff, sig_str_diff]])
+
+
+                X = np.array([[age_diff, win_streak_diff, avg_TD_landed_diff]])
 
                 try:
                     prediction_function(X, bImage, rImage, Blue_Fighter, Red_Fighter)
