@@ -1,5 +1,5 @@
 
-# UFC Fight Prediciton Using Neural Networks
+# [UFC Fight Prediciton Using Neural Networks](https://share.streamlit.io/elijahbarbour/ufc-fight-prediction-using-neural-networks/primary_page.py)
 
 This project is somewhat a continuation of my first project, [UFC Fight Prediciton Using Machine Learning](https://github.com/ElijahBarbour/UFC-Fight-Prediction-Using-Machine-Learning), but is slightly different. This project constructs a Multi-Layer Neural Network Model in order to predict the winners of UFC Fights. 
 
@@ -35,7 +35,9 @@ Keith Galli [Introduction to Neural Networks in Python (what you need to know) |
 
 ## Deployment
 
+This Machine Learning Project is ran using Streamlit. The necessary python scripts for streamlit are included in repository. You can find a deployed version of this project
 
+[Here](https://share.streamlit.io/elijahbarbour/ufc-fight-prediction-using-neural-networks/primary_page.py)
 
 
 
